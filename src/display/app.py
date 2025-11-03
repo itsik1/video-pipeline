@@ -3,7 +3,7 @@ from multiprocessing import Queue
 import cv2
 from typing import Any
 
-from src.display.overlay import draw_boxes, draw_clock_top_left
+from src.display.overlay import draw_boxes, draw_clock_top_left, blur_regions
 
 
 def display_loop(in_q: Queue) -> None:
@@ -37,6 +37,7 @@ def display_loop(in_q: Queue) -> None:
                 time.sleep(min(delay, 0.01))
                 delay = target - time.time()
 
+            blur_regions(frame, boxes)
             draw_boxes(frame, boxes)
             draw_clock_top_left(frame, time.strftime("%H:%M:%S"))
             cv2.imshow("Video", frame)
